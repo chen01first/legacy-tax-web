@@ -12,13 +12,18 @@ export default function Home() {
     hasSpouse: false 
   });
 
+  // 執行計算邏輯
   const res = calculateDetailedTax(tab, data);
 
+  // 修正後的處理函數：明確定義類型以通過 Vercel 編譯
   const handleInputChange = (key: string, value: string | boolean) => {
-    let finalValue = value;
+    let finalValue: string | number | boolean = value;
+    
     if (typeof value === 'string') {
+      // 確保輸入為空字串時轉換為 0，避免 NaN
       finalValue = value === "" ? 0 : Number(value);
     }
+    
     setData(prev => ({ ...prev, [key]: finalValue }));
   };
 
@@ -87,7 +92,7 @@ export default function Home() {
               {tab === 'ESTATE' && (
                 <div className="mt-10 space-y-6 border-t-2 border-gray-100 pt-8 animate-in slide-in-from-left duration-500">
                   <div className="flex items-center justify-between p-4 bg-gray-50 border-2 border-black rounded-2xl hover:bg-yellow-50 transition-colors cursor-pointer">
-                    <label htmlFor="spouse-check" className="font-black text-lg cursor-pointer">有配偶 (扣 553 萬)</label>
+                    <label htmlFor="spouse-check" className="font-black text-lg cursor-pointer">有配偶 (扣除 553 萬)</label>
                     <input 
                       id="spouse-check"
                       type="checkbox" 
@@ -123,7 +128,6 @@ export default function Home() {
 
           {/* --- 右側：結果與過程 --- */}
           <div className="lg:col-span-7 space-y-8">
-            {/* 稅額總結卡 */}
             <div className="bg-blue-600 text-white p-10 rounded-[40px] shadow-[15px_15px_0px_0px_rgba(0,0,0,1)] border-4 border-black relative overflow-hidden group">
               <div className="relative z-10">
                 <div className="flex justify-between items-center mb-6">
@@ -195,7 +199,6 @@ export default function Home() {
               </div>
             </div>
           </div>
-
         </div>
 
         <footer className="mt-16 text-center border-t-2 border-gray-100 pt-10">
@@ -216,7 +219,7 @@ export default function Home() {
 function DetailRow({ label, val }: { label: string, val: number }) {
   if (val === 0) return null;
   return (
-    <div className="flex justify-between items-center animate-in fade-in slide-in-from-right duration-300">
+    <div className="flex justify-between items-center">
       <span className="font-bold text-gray-500 flex items-center gap-2">
         <span className="w-1.5 h-1.5 bg-red-500 rounded-full"></span>
         {label}
